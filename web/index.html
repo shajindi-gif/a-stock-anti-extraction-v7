@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A股反收割系统 v7 | AI交易决策</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <span class="logo">🧠</span>
+          <div>
+            <h1>A股反收割系统 v7</h1>
+            <p>AI交易决策系统 · Level2 + 预测版</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <select id="scenario" class="select" aria-label="选择场景"></select>
+          <button id="runBtn" class="btn btn-primary">▶ 运行分析</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="hero-card">
+        <div class="symbol-row">
+          <div>
+            <span class="symbol-name" id="symbolName">科创50ETF</span>
+            <span class="symbol-code" id="symbolCode">588000</span>
+          </div>
+          <div class="price" id="price">1.052</div>
+        </div>
+
+        <div class="prob-bar" id="probBar" aria-label="概率分布">
+          <div class="prob-seg up" id="segUp"><span>上涨</span></div>
+          <div class="prob-seg side" id="segSide"><span>震荡</span></div>
+          <div class="prob-seg down" id="segDown"><span>下跌</span></div>
+        </div>
+
+        <div class="prob-legend">
+          <span><i class="dot up"></i>上涨 <strong id="probUp">70%</strong></span>
+          <span><i class="dot side"></i>震荡 <strong id="probSide">20%</strong></span>
+          <span><i class="dot down"></i>下跌 <strong id="probDown">10%</strong></span>
+        </div>
+      </section>
+
+      <div class="grid">
+        <section class="card decision-card">
+          <h2>📉 AI 决策</h2>
+          <div class="decision-badge" id="decisionBadge">BUY_TREND</div>
+          <p class="decision-label" id="decisionLabel">趋势跟随</p>
+        </section>
+
+        <section class="card">
+          <h2>💰 仓位建议</h2>
+          <div class="metric-value" id="position">70%</div>
+          <div class="position-bar"><div class="position-fill" id="positionFill"></div></div>
+        </section>
+
+        <section class="card">
+          <h2>⚠️ 风险控制</h2>
+          <ul class="info-list">
+            <li><span>市场状态</span><strong id="regime">正常</strong></li>
+            <li><span>动态止损</span><strong id="stopPct">-2.3%</strong></li>
+            <li><span>止损状态</span><strong id="stopAction">HOLD</strong></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>🧨 结构判断</h2>
+          <ul class="notes-list" id="structureNotes"></ul>
+        </section>
+      </div>
+
+      <section class="card report-card">
+        <div class="report-header">
+          <h2>📋 完整报告</h2>
+          <button id="copyBtn" class="btn btn-ghost">复制报告</button>
+        </div>
+        <pre id="report" class="report"></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      ⚠️ 结构概率决策工具，不构成投资建议 · v7.0.0
+    </footer>
+  </div>
+
+  <script src="js/v7-core.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

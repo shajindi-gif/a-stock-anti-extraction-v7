@@ -26,7 +26,11 @@ a_stock_anti_extraction_v7/
 ├── data/                # Demo 场景数据
 ├── demo/                # 交互式 CLI Demo
 ├── mac_app/             # macOS 桌面应用
-├── engine.py            # 核心流水线
+├── web/                 # Web 网页版 Demo
+├── chrome_extension/    # Google Chrome 浏览器插件
+├── miniprogram/         # 微信小程序
+├── shared/js/           # 跨平台 JS 核心引擎
+├── engine.py            # Python 核心流水线
 └── run_v7.py            # 主入口
 ```
 
@@ -104,6 +108,44 @@ open dist/A股反收割系统v7.app
 
 ```bash
 python3 -m unittest tests.test_v7 -v
+```
+
+### Web 网页版
+
+```bash
+# 启动本地服务器
+./scripts/serve_web.sh
+# 浏览器打开 http://localhost:8080/web/
+```
+
+也可将 `web/` 目录部署到 GitHub Pages / 任意静态托管。
+
+### Chrome 浏览器插件
+
+```bash
+# 生成图标（首次）
+python3 scripts/generate_icons.py
+
+# Chrome 打开 chrome://extensions/ → 开发者模式 → 加载已解压的扩展
+# 选择 chrome_extension/ 目录
+```
+
+详见 [chrome_extension/README.md](chrome_extension/README.md)
+
+### 微信小程序
+
+1. 用微信开发者工具导入 `miniprogram/` 目录
+2. AppID 可选测试号
+3. 编译预览即可
+
+详见 [miniprogram/README.md](miniprogram/README.md)
+
+### 同步 JS 核心到各端
+
+修改 `shared/js/v7-core.js` 后运行：
+
+```bash
+./scripts/sync_js.sh
 ```
 
 ## 📊 Demo 场景

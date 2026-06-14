@@ -1,0 +1,75 @@
+<view class="container">
+  <view class="header">
+    <text class="title">🧠 A股反收割系统 v7</text>
+    <text class="subtitle">AI交易决策 · Level2 + 预测版</text>
+  </view>
+
+  <picker mode="selector" range="{{scenarioLabels}}" value="{{scenarioIndex}}" bindchange="onScenarioChange">
+    <view class="picker">
+      <text>{{scenarioLabels[scenarioIndex]}}</text>
+      <text class="arrow">▼</text>
+    </view>
+  </picker>
+
+  <button class="btn-run" bindtap="runAnalysis" loading="{{loading}}">▶ 运行分析</button>
+
+  <view class="hero-card">
+    <view class="symbol-row">
+      <view>
+        <text class="symbol-name">{{result.symbol}}</text>
+        <text class="symbol-code">{{result.code}}</text>
+      </view>
+      <text class="price">{{result.price}}</text>
+    </view>
+
+    <view class="prob-bar">
+      <view class="prob-seg up" style="width: {{probUpPct}}%"></view>
+      <view class="prob-seg side" style="width: {{probSidePct}}%"></view>
+      <view class="prob-seg down" style="width: {{probDownPct}}%"></view>
+    </view>
+
+    <view class="prob-legend">
+      <text>上涨 {{probUp}}</text>
+      <text>震荡 {{probSide}}</text>
+      <text>下跌 {{probDown}}</text>
+    </view>
+  </view>
+
+  <view class="grid">
+    <view class="card">
+      <text class="card-title">📉 AI 决策</text>
+      <text class="decision-badge" style="color: {{decisionColor}}; background: {{decisionBg}}">{{result.decision}}</text>
+      <text class="decision-label">{{result.decision_label}}</text>
+    </view>
+
+    <view class="card">
+      <text class="card-title">💰 仓位建议</text>
+      <text class="metric">{{positionPct}}</text>
+      <view class="position-bar">
+        <view class="position-fill" style="width: {{positionPct}}"></view>
+      </view>
+    </view>
+
+    <view class="card">
+      <text class="card-title">⚠️ 风险控制</text>
+      <view class="info-row"><text class="label">市场状态</text><text>{{result.regime_label}}</text></view>
+      <view class="info-row"><text class="label">动态止损</text><text>-{{result.stop_pct}}%</text></view>
+      <view class="info-row"><text class="label">止损状态</text><text>{{result.stop_action}}</text></view>
+    </view>
+
+    <view class="card">
+      <text class="card-title">🧨 结构判断</text>
+      <view wx:for="{{result.structure_notes}}" wx:key="*this" class="note">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="card report-card">
+    <view class="report-header">
+      <text class="card-title">📋 完整报告</text>
+      <button class="btn-copy" size="mini" bindtap="copyReport">复制</button>
+    </view>
+    <text class="report" selectable>{{reportText}}</text>
+  </view>
+
+  <view class="footer">⚠️ 结构概率决策工具，不构成投资建议 · v7.0.0</view>
+</view>

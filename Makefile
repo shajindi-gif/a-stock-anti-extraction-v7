@@ -1,4 +1,4 @@
-.PHONY: run demo test app build-app clean
+.PHONY: run demo test app build-app open-app web sync-js icons chrome clean
 
 run:
 	python3 run_v7.py
@@ -21,6 +21,20 @@ build-app:
 
 open-app:
 	open "dist/A股反收割系统v7.app"
+
+web:
+	chmod +x scripts/serve_web.sh
+	./scripts/serve_web.sh
+
+sync-js:
+	chmod +x scripts/sync_js.sh
+	./scripts/sync_js.sh
+
+icons:
+	python3 scripts/generate_icons.py
+
+chrome: icons sync-js
+	@echo "请在 Chrome 打开 chrome://extensions/ 加载 chrome_extension/ 目录"
 
 clean:
 	rm -rf dist/ build/ __pycache__ .pytest_cache
