@@ -4,6 +4,8 @@
     <text class="subtitle">执行闭环 + 东方财富条件单</text>
   </view>
 
+  <view class="tips">💡 选场景 → 点运行 → 查看东财条件单 → 复制报告</view>
+
   <picker mode="selector" range="{{scenarioLabels}}" value="{{scenarioIndex}}" bindchange="onScenarioChange">
     <view class="picker">
       <text>{{scenarioLabels[scenarioIndex]}}</text>

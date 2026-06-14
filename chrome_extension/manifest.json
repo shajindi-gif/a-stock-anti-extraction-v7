@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "A股反收割系统 v8",
   "version": "8.0.0",
-  "description": "v8 自动交易闭环 + 东方财富条件单建议",
+  "description": "AI交易决策 + 执行闭环 + 东方财富条件单 — 免费演示，无需 API",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",

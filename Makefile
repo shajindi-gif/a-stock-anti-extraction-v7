@@ -1,4 +1,12 @@
-.PHONY: run run-v8 demo test app build-app open-app web dashboard sync-js icons chrome clean
+.PHONY: install start run run-v8 demo test gui build-app open-app web dashboard sync-js icons chrome clean
+
+install:
+	chmod +x scripts/install.sh scripts/start.sh scripts/serve_web.sh scripts/sync_js.sh
+	./scripts/install.sh
+
+start:
+	chmod +x scripts/start.sh
+	./scripts/start.sh
 
 run:
 	python3 run_v7.py
@@ -23,7 +31,7 @@ build-app:
 	./scripts/build_mac_app.sh
 
 open-app:
-	open "dist/A股反收割系统v7.app"
+	open "dist/A股反收割系统v8.app"
 
 web:
 	chmod +x scripts/serve_web.sh
@@ -40,7 +48,10 @@ icons:
 	python3 scripts/generate_icons.py
 
 chrome: icons sync-js
-	@echo "请在 Chrome 打开 chrome://extensions/ 加载 chrome_extension/ 目录"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo "Chrome 插件：chrome://extensions/"
+	@echo "开发者模式 → 加载 chrome_extension/ 目录"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 clean:
 	rm -rf dist/ build/ __pycache__ .pytest_cache

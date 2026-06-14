@@ -323,6 +323,43 @@ body {
   padding-top: 8px;
 }
 
+.onboarding {
+  background: linear-gradient(90deg, #1f6feb33, #8957e533);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+}
+
+.onboarding.hidden {
+  display: none;
+}
+
+.onboarding-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.onboarding-inner span {
+  color: var(--muted);
+  flex: 1;
+}
+
+.btn-dismiss {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 .v8-grid {
   margin-bottom: 20px;
 }

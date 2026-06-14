@@ -1,9 +1,56 @@
-# 🚀 A股反收割系统 v7 → v8
+# 🚀 A股反收割系统 v8
 
-**v7**：AI交易决策（Level2 + 预测版）  
-**v8**：自动交易闭环 + 东方财富条件单 + Streamlit 数据看板
+[![CI](https://github.com/shajindi-gif/a-stock-anti-extraction-v7/actions/workflows/ci.yml/badge.svg)](https://github.com/shajindi-gif/a-stock-anti-extraction-v7/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-green.svg)](https://www.python.org/downloads/)
 
-> ⚠️ **免责声明**：本系统为结构概率决策工具，用于研究与学习，不构成任何投资建议。v8 不自动下单，条件单需在东财 APP 手动设置。
+**任何人都能用的 A 股 AI 交易决策演示产品**
+
+- 🧠 AI 预测：盘口 + 资金 + 情绪 → 上涨/震荡/下跌概率
+- 🔄 执行闭环：订单路由、仓位重平衡、自动止损计划
+- 📱 东方财富条件单：可直接复制到东财 APP 设置
+- 🖥️ **6 种使用方式**：终端 / 看板 / 网页 / Mac / Chrome / 微信小程序
+
+> ⚠️ **免责声明**：结构概率演示工具，不构成投资建议，不自动下单。
+
+**📖 新手请读：[QUICKSTART.md](QUICKSTART.md)（3 分钟上手）**
+
+**🌐 在线体验（无需安装）：** https://shajindi-gif.github.io/a-stock-anti-extraction-v7/
+
+---
+
+## ⚡ 一键开始
+
+```bash
+git clone https://github.com/shajindi-gif/a-stock-anti-extraction-v7.git
+cd a-stock-anti-extraction-v7
+make install          # 安装依赖 + 测试
+make start            # 交互式菜单（推荐）
+```
+
+或直接：
+
+```bash
+make run-v8           # 终端完整报告
+make dashboard        # Streamlit 数据看板
+make web              # 本地网页 → http://localhost:8080/web/
+make gui              # Mac 图形界面
+```
+
+---
+
+## 📦 全部产品形态
+
+| 产品 | 命令 / 方式 | 说明 |
+|------|-------------|------|
+| **交互菜单** | `make start` | 一个菜单启动所有功能 |
+| **v8 终端** | `make run-v8` | 完整报告 + 东财条件单 |
+| **Streamlit 看板** | `make dashboard` | 4 Tab 可视化数据看板 |
+| **Web 网页** | [在线](https://shajindi-gif.github.io/a-stock-anti-extraction-v7/) 或 `make web` | 浏览器即用 |
+| **Mac 桌面** | `make gui` / `make build-app` | tkinter GUI / .app |
+| **Chrome 插件** | `make chrome` → 加载 `chrome_extension/` | 弹窗 + 行情页浮标 |
+| **微信小程序** | 微信开发者工具导入 `miniprogram/` | 手机预览 |
+| **v7 终端** | `make run` | 仅 AI 决策（兼容保留） |
 
 ---
 
@@ -11,236 +58,55 @@
 
 ```
 a_stock_anti_extraction_v7/
-├── prediction/          # 方向预测 + 概率引擎
-│   ├── next_move_model.py
-│   └── probability_engine.py
-├── decision/            # AI 交易员 + 动态仓位
-│   ├── ai_trader.py
-│   └── position_adaptor.py
-├── risk/                # 动态止损 + 市场状态保护
-│   ├── dynamic_stop.py
-│   └── regime_guard.py
-├── signal/              # 多信号融合
-│   └── fused_signal.py
-├── data/                # Demo 场景数据
-├── demo/                # 交互式 CLI Demo
-├── mac_app/             # macOS 桌面应用
-├── web/                 # Web 网页版 Demo
-├── chrome_extension/    # Google Chrome 浏览器插件
-├── miniprogram/         # 微信小程序
-├── shared/js/           # 跨平台 JS 核心（v7-core + v8-core）
-├── execution/           # v8 订单路由 / 重平衡 / 自动止损
-├── broker/              # v8 东方财富条件单建议
-├── dashboard/           # v8 Streamlit 数据看板
-├── engine.py            # v7 Python 流水线
-├── engine_v8.py         # v8 Python 流水线（叠加执行闭环）
-├── run_v7.py            # v7 入口（make run）
-└── run_v8.py            # v8 入口（make run-v8）
+├── prediction/ decision/ risk/ signal/   # v7 AI 决策核心
+├── execution/ broker/                     # v8 执行 + 东财条件单
+├── dashboard/streamlit_app.py             # 数据看板
+├── web/ chrome_extension/ miniprogram/    # 三端产品
+├── mac_app/gui_app.py                     # Mac 桌面
+├── shared/js/v7-core.js + v8-core.js      # 跨端 JS 引擎
+├── scripts/install.sh + start.sh          # 一键安装 / 启动
+├── engine_v8.py + run_v8.py               # v8 主入口
+└── tests/                                 # 20 项自动化测试
 ```
 
-## 🔄 决策流水线
-
-```
-Level2盘口 + 资金流 + 情绪信号
-        ↓
-   多信号融合 (fused_signal)
-        ↓
-   方向预测 (next_move_model)
-        ↓
-   概率计算 (probability_engine)
-        ↓
-   市场状态检测 (regime_guard)
-        ↓
-   AI 决策 (ai_trader) + 动态仓位 (position_adaptor)
-        ↓
-   动态止损 (dynamic_stop)
-        ↓
-   完整交易报告
-```
-
-## 🚀 快速开始
-
-### 环境要求
-
-- Python 3.9+
-- macOS 11+（桌面应用）
-- 无第三方依赖（标准库即可运行）
-
-### CLI 运行
-
-```bash
-cd a_stock_anti_extraction_v7
-
-# v7 默认场景（make run 不变）
-python3 run_v7.py
-make run
-
-# v8 自动交易闭环 + 东财条件单
-python3 run_v8.py
-make run-v8
-
-# v8 全场景摘要
-python3 run_v8.py --all
-
-# 指定场景 / JSON
-python3 run_v8.py -s bear_trap_detected --json
-```
-
-### Demo
-
-```bash
-# 运行全部 4 个场景
-python3 demo/demo_cli.py --all
-
-# 交互式选择
-python3 demo/demo_cli.py
-```
-
-### macOS 桌面应用
-
-```bash
-# 直接启动 GUI
-python3 mac_app/gui_app.py
-
-# 或使用 Make
-make gui
-
-# 构建 .app 应用包
-make build-app
-open dist/A股反收割系统v7.app
-```
-
-### 测试
-
-```bash
-make test
-# 或
-python3 -m unittest tests.test_v7 tests.test_v8 -v
-```
-
-### v8 Streamlit 数据看板
-
-```bash
-pip install streamlit pandas
-make dashboard
-```
-
-详见 [dashboard/README.md](dashboard/README.md)
-
-看板包含：决策概览、执行闭环、东方财富条件单、全场景对比四个 Tab。
-
-### Web 网页版
-
-```bash
-# 启动本地服务器
-./scripts/serve_web.sh
-# 浏览器打开 http://localhost:8080/web/
-```
-
-也可将 `web/` 目录部署到 GitHub Pages / 任意静态托管。
-
-### Chrome 浏览器插件
-
-```bash
-# 生成图标（首次）
-python3 scripts/generate_icons.py
-
-# Chrome 打开 chrome://extensions/ → 开发者模式 → 加载已解压的扩展
-# 选择 chrome_extension/ 目录
-```
-
-详见 [chrome_extension/README.md](chrome_extension/README.md)
-
-### 微信小程序
-
-1. 用微信开发者工具导入 `miniprogram/` 目录
-2. AppID 可选测试号
-3. 编译预览即可
-
-详见 [miniprogram/README.md](miniprogram/README.md)
-
-### 同步 JS 核心到各端
-
-修改 `shared/js/v7-core.js` 或 `v8-core.js` 后运行：
-
-```bash
-./scripts/sync_js.sh
-```
-
-Web / Chrome / 小程序均已集成 v8 执行闭环与东财条件单展示。
+---
 
 ## 📊 Demo 场景
 
-| 场景 | 标的 | 预期决策 |
+| 场景 | 标的 | 典型结果 |
 |------|------|----------|
-| `bullish_kcb50` | 科创50ETF | BUY_TREND |
-| `sideways_hs300` | 沪深300ETF | HOLD（震荡概率 50%） |
-| `bear_trap_detected` | 创业板ETF | HOLD（下跌概率 50%） |
-| `liquidity_crisis` | 科创50ETF | NO_TRADE |
+| `bullish_kcb50` | 科创50ETF | BUY_TREND + 买入条件单 |
+| `sideways_hs300` | 沪深300ETF | HOLD + 观望 |
+| `bear_trap_detected` | 创业板ETF | 诱多预警 + 减仓 |
+| `liquidity_crisis` | 科创50ETF | NO_TRADE 禁止交易 |
 
-## 📋 示例输出
-
-```
-🧠 A股反收割系统 v7（AI交易决策版）
-━━━━━━━━━━━━━━
-📊 标的：科创50ETF (588000)
-💹 当前价：1.052
-🧠 预测结果：
-  - 上涨概率：70%
-  - 震荡概率：20%
-  - 下跌风险：10%
-━━━━━━━━━━━━━━
-📉 AI决策：
-  👉 BUY_TREND（趋势跟随）
-━━━━━━━━━━━━━━
-💰 仓位建议：
-  → 70%
-━━━━━━━━━━━━━━
-⚠️ 风险控制：
-  → 市场状态：正常
-  → 动态止损 -2.3%
-  → 止损状态：HOLD
-━━━━━━━━━━━━━━
-🧨 结构判断：
-  → 无明显诱多
-  → 资金流入中
-  → 盘口强度比 2.02
-━━━━━━━━━━━━━━
+```bash
+python3 run_v8.py -s bear_trap_detected   # 切换场景
+python3 run_v8.py --all                   # 4 场景一览
 ```
 
-## 🧩 v7 三大核心能力
+---
 
-1. **盘口 → 概率化预测** — 将 Level2 结构转化为 UP/SIDE/DOWN 概率
-2. **多信号融合 → 交易决策** — AI 交易员综合概率与市场状态
-3. **动态仓位控制** — 根据概率分布自动调整建议仓位（10%~80%）
+## 🛠 开发 & 测试
+
+```bash
+make test              # 20 项测试
+make sync-js           # 同步 JS 到 web/chrome/小程序
+make clean             # 清理缓存
+```
+
+---
 
 ## 📈 版本演进
 
 | 版本 | 能力 |
 |------|------|
-| v1 | 识别收割 |
-| v2 | 日报 |
-| v3 | 分时 |
-| v4 | 盘口结构 |
-| v5 | 资金流 |
-| v6 | 订单流 |
-| **v7** | **AI 预测 + 决策** |
-| **v8** | **执行闭环 + 东财条件单 + 数据看板** |
+| v1–v6 | 识别 → 日报 → 分时 → 盘口 → 资金 → 订单流 |
+| **v7** | AI 预测 + 决策 |
+| **v8** | 执行闭环 + 东财条件单 + 6 端产品 + 数据看板 |
 
-## 🚀 v8 核心能力
-
-1. **订单路由** — AI 决策 → 买/卖/持有/禁止
-2. **仓位重平衡** — 目标仓位 vs 当前持仓，计算调仓份数
-3. **自动止损计划** — 动态止损价 / 止盈价 / 触发状态
-4. **东方财富条件单** — 止损/止盈/定价买卖/回落卖出，含 APP 操作路径
-5. **Streamlit 看板** — 全场景对比、概率图表、条件单一览
-
-## 🔮 v9 展望
-
-- 券商 API 真实自动下单
-- 多策略组合并行
-- 实时行情接入
+---
 
 ## 📄 License
 
-MIT
+MIT · [shajindi-gif](https://github.com/shajindi-gif)

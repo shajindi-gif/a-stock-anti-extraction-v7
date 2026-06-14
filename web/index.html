@@ -3,10 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A股反收割系统 v7 | AI交易决策</title>
+  <title>A股反收割系统 v8 | AI交易决策</title>
+  <meta name="description" content="A股反收割系统 v8 — AI交易决策、执行闭环、东方财富条件单建议。免费演示工具。" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div id="onboarding" class="onboarding">
+    <div class="onboarding-inner">
+      <strong>👋 首次使用？</strong>
+      <span>① 选择 Demo 场景 → ② 点击「运行分析」→ ③ 查看东财条件单建议 → ④ 复制报告</span>
+      <button id="dismissOnboarding" class="btn-dismiss">知道了</button>
+    </div>
+  </div>
   <div class="app">
     <header class="header">
       <div class="header-inner">
@@ -99,6 +107,7 @@
         <div class="report-header">
           <h2>📋 完整报告</h2>
           <button id="copyBtn" class="btn btn-ghost">复制报告</button>
+          <button id="copyCondBtn" class="btn btn-ghost">复制条件单</button>
         </div>
         <pre id="report" class="report"></pre>
       </section>

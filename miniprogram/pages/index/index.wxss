@@ -19,6 +19,16 @@
   margin-top: 8rpx;
 }
 
+.tips {
+  background: #1f6feb22;
+  border: 1rpx solid #30363d;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 24rpx;
+  color: #8b949e;
+  margin-bottom: 16rpx;
+}
+
 .picker {
   display: flex;
   justify-content: space-between;

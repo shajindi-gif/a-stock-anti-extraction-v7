@@ -7,6 +7,8 @@
   const els = {
     scenario: document.getElementById('scenario'),
     runBtn: document.getElementById('runBtn'),
+    onboarding: document.getElementById('onboarding'),
+    dismissOnboarding: document.getElementById('dismissOnboarding'),
     symbolName: document.getElementById('symbolName'),
     symbolCode: document.getElementById('symbolCode'),
     price: document.getElementById('price'),
@@ -32,7 +34,10 @@
     conditionalOrders: document.getElementById('conditionalOrders'),
     report: document.getElementById('report'),
     copyBtn: document.getElementById('copyBtn'),
+    copyCondBtn: document.getElementById('copyCondBtn'),
   };
+
+  let lastResult = null;
 
   function pct(n) {
     return Math.round(n * 100) + '%';
@@ -92,7 +97,8 @@
   }
 
   function analyze() {
-    renderV8(runV8Pipeline(getScenario(els.scenario.value)));
+    lastResult = runV8Pipeline(getScenario(els.scenario.value));
+    renderV8(lastResult);
   }
 
   function initSelect() {
@@ -112,6 +118,23 @@
       els.copyBtn.textContent = '已复制 ✓';
       setTimeout(function () { els.copyBtn.textContent = '复制报告'; }, 1500);
     });
+  });
+
+  els.copyCondBtn.addEventListener('click', function () {
+    if (!lastResult) return;
+    const text = lastResult.eastmoney_guide || '暂无条件单';
+    navigator.clipboard.writeText(text).then(function () {
+      els.copyCondBtn.textContent = '已复制 ✓';
+      setTimeout(function () { els.copyCondBtn.textContent = '复制条件单'; }, 1500);
+    });
+  });
+
+  if (localStorage.getItem('v8_onboarding_dismissed')) {
+    els.onboarding.classList.add('hidden');
+  }
+  els.dismissOnboarding.addEventListener('click', function () {
+    els.onboarding.classList.add('hidden');
+    localStorage.setItem('v8_onboarding_dismissed', '1');
   });
 
   initSelect();

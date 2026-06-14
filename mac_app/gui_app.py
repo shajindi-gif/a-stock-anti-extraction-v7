@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A股反收割系统 v7 — macOS 桌面应用。"""
+"""A股反收割系统 v8 — macOS 桌面应用。"""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from data.demo_scenarios import get_scenario, list_scenarios  # noqa: E402
-from engine import run_v7_pipeline  # noqa: E402
+from engine_v8 import run_v8_pipeline  # noqa: E402
 
 SCENARIO_LABELS = {
     "bullish_kcb50": "科创50ETF · 多头结构",
@@ -33,16 +33,15 @@ COLORS = {
     "green": "#3fb950",
     "yellow": "#d29922",
     "red": "#f85149",
-    "purple": "#bc8cff",
 }
 
 
 class AntiExtractionApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("A股反收割系统 v7")
-        self.geometry("720x680")
-        self.minsize(640, 600)
+        self.title("A股反收割系统 v8")
+        self.geometry("760x820")
+        self.minsize(640, 680)
         self.configure(bg=COLORS["bg"])
 
         self._setup_styles()
@@ -69,34 +68,31 @@ class AntiExtractionApp(tk.Tk):
         style.map("Run.TButton", background=[("active", "#1f6feb")])
 
     def _build_ui(self) -> None:
-        header = tk.Frame(self, bg=COLORS["bg"], pady=16)
+        header = tk.Frame(self, bg=COLORS["bg"], pady=12)
         header.pack(fill="x", padx=24)
 
         title_font = tkfont.Font(family="PingFang SC", size=20, weight="bold")
         tk.Label(
             header,
-            text="🧠 A股反收割系统 v7",
+            text="🚀 A股反收割系统 v8",
             font=title_font,
             fg=COLORS["text"],
             bg=COLORS["bg"],
         ).pack(anchor="w")
         tk.Label(
             header,
-            text="AI交易决策系统 · Level2 + 预测版",
-            font=("PingFang SC", 12),
+            text="AI决策 + 执行闭环 + 东方财富条件单 · 选场景后点运行",
+            font=("PingFang SC", 11),
             fg=COLORS["muted"],
             bg=COLORS["bg"],
         ).pack(anchor="w", pady=(4, 0))
 
         control = tk.Frame(self, bg=COLORS["panel"], padx=16, pady=12)
-        control.pack(fill="x", padx=24, pady=(0, 12))
+        control.pack(fill="x", padx=24, pady=(0, 8))
 
-        tk.Label(
-            control,
-            text="Demo 场景",
-            fg=COLORS["muted"],
-            bg=COLORS["panel"],
-        ).pack(side="left", padx=(0, 8))
+        tk.Label(control, text="Demo 场景", fg=COLORS["muted"], bg=COLORS["panel"]).pack(
+            side="left", padx=(0, 8)
+        )
 
         self.scenario_var = tk.StringVar(value="bullish_kcb50")
         combo = ttk.Combobox(
@@ -110,16 +106,12 @@ class AntiExtractionApp(tk.Tk):
         combo.bind("<<ComboboxSelected>>", self._on_scenario_change)
 
         ttk.Button(control, text="▶ 运行分析", style="Run.TButton", command=self._run).pack(
-            side="left"
+            side="left", padx=(0, 8)
         )
+        ttk.Button(control, text="复制报告", command=self._copy_report).pack(side="left")
 
-        self.cards_frame = tk.Frame(self, bg=COLORS["bg"])
-        self.cards_frame.pack(fill="both", expand=True, padx=24, pady=(0, 12))
-
-        self.prob_canvas = tk.Canvas(
-            self.cards_frame, height=28, bg=COLORS["bg"], highlightthickness=0
-        )
-        self.prob_canvas.pack(fill="x", pady=(0, 12))
+        self.prob_canvas = tk.Canvas(self, height=28, bg=COLORS["bg"], highlightthickness=0)
+        self.prob_canvas.pack(fill="x", padx=24, pady=(0, 8))
 
         self.output = tk.Text(
             self,
@@ -130,19 +122,18 @@ class AntiExtractionApp(tk.Tk):
             relief="flat",
             padx=16,
             pady=12,
-            font=("Menlo", 12),
+            font=("Menlo", 11),
         )
-        self.output.pack(fill="both", expand=True, padx=24, pady=(0, 16))
+        self.output.pack(fill="both", expand=True, padx=24, pady=(0, 8))
         self.output.configure(state="disabled")
 
-        footer = tk.Label(
+        tk.Label(
             self,
-            text="⚠️ 结构概率决策工具，不构成投资建议 · v7.0.0",
+            text="⚠️ 演示工具，不构成投资建议 · 条件单请在东财 APP 手动设置 · v8.0.0",
             fg=COLORS["muted"],
             bg=COLORS["bg"],
             font=("PingFang SC", 10),
-        )
-        footer.pack(pady=(0, 12))
+        ).pack(pady=(0, 10))
 
     def _on_scenario_change(self, _event: object = None) -> None:
         self._analyze(self.scenario_var.get())
@@ -151,8 +142,8 @@ class AntiExtractionApp(tk.Tk):
         self._analyze(self.scenario_var.get())
 
     def _analyze(self, scenario_name: str) -> None:
-        result = run_v7_pipeline(get_scenario(scenario_name))
-        self._draw_prob_bar(result.probability)
+        result = run_v8_pipeline(get_scenario(scenario_name))
+        self._draw_prob_bar(result.v7.probability)
         self._render_report(result.to_report())
 
     def _draw_prob_bar(self, prob: dict[str, float]) -> None:
@@ -185,6 +176,13 @@ class AntiExtractionApp(tk.Tk):
         self.output.delete("1.0", "end")
         self.output.insert("1.0", text)
         self.output.configure(state="disabled")
+        self._report_text = text
+
+    def _copy_report(self) -> None:
+        self.clipboard_clear()
+        self.clipboard_append(getattr(self, "_report_text", ""))
+        self.title("A股反收割系统 v8 · 已复制 ✓")
+        self.after(1500, lambda: self.title("A股反收割系统 v8"))
 
 
 def main() -> None:

@@ -66,8 +66,8 @@ def main() -> None:
         portfolio = get_portfolio()
         pv = st.number_input("组合总值（元）", value=float(portfolio["total_value"]), step=10000.0)
         st.divider()
-        st.markdown("**快捷入口**")
-        st.code("make run-v8\nmake dashboard", language="bash")
+        st.markdown("**新手？** [QUICKSTART.md](https://github.com/shajindi-gif/a-stock-anti-extraction-v7/blob/main/QUICKSTART.md)")
+        st.markdown("**在线 Web：** [网页版](https://shajindi-gif.github.io/a-stock-anti-extraction-v7/)")
         st.warning("⚠️ 演示工具，不构成投资建议")
 
     result = run_v8_pipeline(get_scenario(scenario), portfolio_value=pv)
