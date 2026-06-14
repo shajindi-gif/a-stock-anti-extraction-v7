@@ -1,7 +1,8 @@
 (function () {
   'use strict';
 
-  const { runV7Pipeline, toReport, getScenario, getScenarioOptions, decisionColor } = V7Engine;
+  const Engine = typeof V8Engine !== 'undefined' ? V8Engine : V7Engine;
+  const { runV8Pipeline, toReportV8, getScenario, getScenarioOptions, decisionColor } = Engine;
 
   const els = {
     scenario: document.getElementById('scenario'),
@@ -23,6 +24,12 @@
     stopPct: document.getElementById('stopPct'),
     stopAction: document.getElementById('stopAction'),
     structureNotes: document.getElementById('structureNotes'),
+    orderIntent: document.getElementById('orderIntent'),
+    orderNote: document.getElementById('orderNote'),
+    rebalanceAction: document.getElementById('rebalanceAction'),
+    rebalanceShares: document.getElementById('rebalanceShares'),
+    rebalanceDiff: document.getElementById('rebalanceDiff'),
+    conditionalOrders: document.getElementById('conditionalOrders'),
     report: document.getElementById('report'),
     copyBtn: document.getElementById('copyBtn'),
   };
@@ -31,12 +38,13 @@
     return Math.round(n * 100) + '%';
   }
 
-  function render(result) {
-    const p = result.probability;
+  function renderV8(result) {
+    const v7 = result.v7;
+    const p = v7.probability;
 
-    els.symbolName.textContent = result.symbol;
-    els.symbolCode.textContent = result.code;
-    els.price.textContent = result.price.toFixed(3);
+    els.symbolName.textContent = v7.symbol;
+    els.symbolCode.textContent = v7.code;
+    els.price.textContent = v7.price.toFixed(3);
 
     els.segUp.style.width = pct(p.up);
     els.segSide.style.width = pct(p.side);
@@ -49,29 +57,42 @@
     els.probSide.textContent = pct(p.side);
     els.probDown.textContent = pct(p.down);
 
-    const color = decisionColor(result.decision);
-    els.decisionBadge.textContent = result.decision;
+    const color = decisionColor(v7.decision);
+    els.decisionBadge.textContent = v7.decision;
     els.decisionBadge.style.color = color;
     els.decisionBadge.style.background = color + '22';
-    els.decisionLabel.textContent = result.decision_label;
+    els.decisionLabel.textContent = v7.decision_label;
 
-    els.position.textContent = pct(result.position);
-    els.positionFill.style.width = pct(result.position);
+    els.position.textContent = pct(v7.position);
+    els.positionFill.style.width = pct(v7.position);
 
-    els.regime.textContent = result.regime_label;
-    els.stopPct.textContent = '-' + result.stop_pct + '%';
-    els.stopAction.textContent = result.stop_action;
+    els.regime.textContent = v7.regime_label;
+    els.stopPct.textContent = '-' + v7.stop_pct + '%';
+    els.stopAction.textContent = v7.stop_action;
 
-    els.structureNotes.innerHTML = result.structure_notes
+    els.structureNotes.innerHTML = v7.structure_notes
       .map(function (n) { return '<li>' + n + '</li>'; })
       .join('');
 
-    els.report.textContent = toReport(result);
+    els.orderIntent.textContent = result.order_route.action_label;
+    els.orderNote.textContent = result.order_route.note;
+    els.rebalanceAction.textContent = result.rebalance.action_label;
+    els.rebalanceShares.textContent = result.rebalance.shares + ' 份';
+    els.rebalanceDiff.textContent = (result.rebalance.diff_value >= 0 ? '+' : '') +
+      result.rebalance.diff_value.toFixed(0) + ' 元';
+
+    els.conditionalOrders.innerHTML = result.conditional_orders.length
+      ? result.conditional_orders.map(function (o) {
+          return '<li><strong>' + o.type + '</strong> · 触发 ' + o.trigger_price +
+            ' · ' + o.quantity + '<br><span style="color:#8b949e">' + o.app_path + '</span></li>';
+        }).join('')
+      : '<li>当前无需设置条件单</li>';
+
+    els.report.textContent = toReportV8(result);
   }
 
   function analyze() {
-    const key = els.scenario.value;
-    render(runV7Pipeline(getScenario(key)));
+    renderV8(runV8Pipeline(getScenario(els.scenario.value)));
   }
 
   function initSelect() {

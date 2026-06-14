@@ -323,6 +323,18 @@ body {
   padding-top: 8px;
 }
 
+.v8-grid {
+  margin-bottom: 20px;
+}
+
+.v8-sm {
+  font-size: 1.4rem !important;
+}
+
+.card-wide {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 600px) {
   .header-inner {
     flex-direction: column;

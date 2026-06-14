@@ -1,7 +1,10 @@
-.PHONY: run demo test app build-app open-app web sync-js icons chrome clean
+.PHONY: run run-v8 demo test app build-app open-app web dashboard sync-js icons chrome clean
 
 run:
 	python3 run_v7.py
+
+run-v8:
+	python3 run_v8.py
 
 demo:
 	python3 demo/demo_cli.py --all
@@ -13,7 +16,7 @@ gui:
 	python3 mac_app/gui_app.py
 
 test:
-	python3 -m unittest tests.test_v7 -v
+	python3 -m unittest tests.test_v7 tests.test_v8 -v
 
 build-app:
 	chmod +x scripts/build_mac_app.sh
@@ -25,6 +28,9 @@ open-app:
 web:
 	chmod +x scripts/serve_web.sh
 	./scripts/serve_web.sh
+
+dashboard:
+	streamlit run dashboard/streamlit_app.py
 
 sync-js:
 	chmod +x scripts/sync_js.sh

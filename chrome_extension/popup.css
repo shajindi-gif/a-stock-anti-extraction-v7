@@ -111,9 +111,22 @@ header p {
   font-size: 10px;
   line-height: 1.5;
   white-space: pre-wrap;
-  max-height: 200px;
+  max-height: 160px;
   overflow-y: auto;
   margin-bottom: 8px;
+}
+
+.cond-list {
+  margin-bottom: 8px;
+}
+
+.cond-item {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 10px;
+  margin-bottom: 4px;
 }
 
 footer {

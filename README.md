@@ -1,10 +1,9 @@
-# 🚀 A股反收割系统 v7
+# 🚀 A股反收割系统 v7 → v8
 
-**AI交易决策系统（Level2 + 预测版）**
+**v7**：AI交易决策（Level2 + 预测版）  
+**v8**：自动交易闭环 + 东方财富条件单 + Streamlit 数据看板
 
-从 v6 的「盘口识别」升级为 **盘口 + 资金 + 情绪 → 下一步走势概率预测**，形成完整的 AI 交易决策流水线。
-
-> ⚠️ **免责声明**：本系统为结构概率决策工具，用于研究与学习，不构成任何投资建议。不保证盈利。
+> ⚠️ **免责声明**：本系统为结构概率决策工具，用于研究与学习，不构成任何投资建议。v8 不自动下单，条件单需在东财 APP 手动设置。
 
 ---
 
@@ -29,9 +28,14 @@ a_stock_anti_extraction_v7/
 ├── web/                 # Web 网页版 Demo
 ├── chrome_extension/    # Google Chrome 浏览器插件
 ├── miniprogram/         # 微信小程序
-├── shared/js/           # 跨平台 JS 核心引擎
-├── engine.py            # Python 核心流水线
-└── run_v7.py            # 主入口
+├── shared/js/           # 跨平台 JS 核心（v7-core + v8-core）
+├── execution/           # v8 订单路由 / 重平衡 / 自动止损
+├── broker/              # v8 东方财富条件单建议
+├── dashboard/           # v8 Streamlit 数据看板
+├── engine.py            # v7 Python 流水线
+├── engine_v8.py         # v8 Python 流水线（叠加执行闭环）
+├── run_v7.py            # v7 入口（make run）
+└── run_v8.py            # v8 入口（make run-v8）
 ```
 
 ## 🔄 决策流水线
@@ -67,17 +71,19 @@ Level2盘口 + 资金流 + 情绪信号
 ```bash
 cd a_stock_anti_extraction_v7
 
-# 默认场景（科创50ETF 多头结构）
+# v7 默认场景（make run 不变）
 python3 run_v7.py
+make run
 
-# 指定场景
-python3 run_v7.py -s bear_trap_detected
+# v8 自动交易闭环 + 东财条件单
+python3 run_v8.py
+make run-v8
 
-# JSON 输出
-python3 run_v7.py --json
+# v8 全场景摘要
+python3 run_v8.py --all
 
-# 列出所有场景
-python3 run_v7.py --list
+# 指定场景 / JSON
+python3 run_v8.py -s bear_trap_detected --json
 ```
 
 ### Demo
@@ -107,8 +113,21 @@ open dist/A股反收割系统v7.app
 ### 测试
 
 ```bash
-python3 -m unittest tests.test_v7 -v
+make test
+# 或
+python3 -m unittest tests.test_v7 tests.test_v8 -v
 ```
+
+### v8 Streamlit 数据看板
+
+```bash
+pip install streamlit pandas
+make dashboard
+```
+
+详见 [dashboard/README.md](dashboard/README.md)
+
+看板包含：决策概览、执行闭环、东方财富条件单、全场景对比四个 Tab。
 
 ### Web 网页版
 
@@ -142,11 +161,13 @@ python3 scripts/generate_icons.py
 
 ### 同步 JS 核心到各端
 
-修改 `shared/js/v7-core.js` 后运行：
+修改 `shared/js/v7-core.js` 或 `v8-core.js` 后运行：
 
 ```bash
 ./scripts/sync_js.sh
 ```
+
+Web / Chrome / 小程序均已集成 v8 执行闭环与东财条件单展示。
 
 ## 📊 Demo 场景
 
@@ -204,12 +225,21 @@ python3 scripts/generate_icons.py
 | v5 | 资金流 |
 | v6 | 订单流 |
 | **v7** | **AI 预测 + 决策** |
+| **v8** | **执行闭环 + 东财条件单 + 数据看板** |
 
-## 🔮 v8 展望
+## 🚀 v8 核心能力
 
-- 券商 API 自动下单
-- 自动调仓与止损
-- 多策略组合运行
+1. **订单路由** — AI 决策 → 买/卖/持有/禁止
+2. **仓位重平衡** — 目标仓位 vs 当前持仓，计算调仓份数
+3. **自动止损计划** — 动态止损价 / 止盈价 / 触发状态
+4. **东方财富条件单** — 止损/止盈/定价买卖/回落卖出，含 APP 操作路径
+5. **Streamlit 看板** — 全场景对比、概率图表、条件单一览
+
+## 🔮 v9 展望
+
+- 券商 API 真实自动下单
+- 多策略组合并行
+- 实时行情接入
 
 ## 📄 License
 

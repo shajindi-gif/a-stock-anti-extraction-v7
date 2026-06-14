@@ -218,3 +218,43 @@
   color: #8b949e;
   padding: 16rpx 0;
 }
+
+.v8-section {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  margin-bottom: 12rpx;
+}
+
+.cond-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #30363d;
+}
+
+.cond-item:last-child {
+  border-bottom: none;
+}
+
+.cond-type {
+  display: block;
+  font-weight: 700;
+  font-size: 26rpx;
+  margin-bottom: 6rpx;
+}
+
+.cond-detail {
+  display: block;
+  font-size: 24rpx;
+  color: #8b949e;
+}
+
+.cond-path {
+  display: block;
+  font-size: 22rpx;
+  color: #58a6ff;
+  margin-top: 4rpx;
+}

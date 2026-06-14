@@ -1,4 +1,4 @@
-const V7 = require('../../utils/v7-core.js');
+const V8 = require('../../utils/v8-core.js');
 
 Page({
   data: {
@@ -17,6 +17,10 @@ Page({
       stop_action: '',
       structure_notes: [],
     },
+    orderRoute: '—',
+    rebalanceAction: '—',
+    rebalanceShares: 0,
+    conditionalOrders: [],
     probUp: '0%',
     probSide: '0%',
     probDown: '0%',
@@ -30,7 +34,7 @@ Page({
   },
 
   onLoad() {
-    const options = V7.getScenarioOptions();
+    const options = V8.getScenarioOptions();
     this.setData({
       scenarioKeys: options.map((o) => o.key),
       scenarioLabels: options.map((o) => o.label),
@@ -45,15 +49,17 @@ Page({
 
   runAnalysis() {
     const key = this.data.scenarioKeys[this.data.scenarioIndex];
-    const result = V7.runV7Pipeline(V7.getScenario(key));
+    const v8 = V8.runV8Pipeline(V8.getScenario(key));
+    const result = v8.v7;
     const p = result.probability;
 
     this.setData({
       loading: false,
-      result: {
-        ...result,
-        price: result.price.toFixed(3),
-      },
+      result: { ...result, price: result.price.toFixed(3) },
+      orderRoute: v8.order_route.action_label,
+      rebalanceAction: v8.rebalance.action_label,
+      rebalanceShares: v8.rebalance.shares,
+      conditionalOrders: v8.conditional_orders,
       probUp: this.pct(p.up),
       probSide: this.pct(p.side),
       probDown: this.pct(p.down),
@@ -61,9 +67,9 @@ Page({
       probSidePct: Math.round(p.side * 100),
       probDownPct: Math.round(p.down * 100),
       positionPct: this.pct(result.position),
-      decisionColor: V7.decisionColor(result.decision),
-      decisionBg: V7.decisionColor(result.decision) + '22',
-      reportText: V7.toReport(result),
+      decisionColor: V8.decisionColor(result.decision),
+      decisionBg: V8.decisionColor(result.decision) + '22',
+      reportText: V8.toReportV8(v8),
     });
   },
 

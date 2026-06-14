@@ -13,8 +13,8 @@
         <div class="brand">
           <span class="logo">🧠</span>
           <div>
-            <h1>A股反收割系统 v7</h1>
-            <p>AI交易决策系统 · Level2 + 预测版</p>
+            <h1>A股反收割系统 v8</h1>
+            <p>AI交易决策 + 执行闭环 + 东方财富条件单</p>
           </div>
         </div>
         <div class="header-actions">
@@ -75,6 +75,26 @@
         </section>
       </div>
 
+      <div class="grid v8-grid">
+        <section class="card">
+          <h2>🔄 订单路由</h2>
+          <div class="metric-value v8-sm" id="orderIntent">—</div>
+          <p class="decision-label" id="orderNote">—</p>
+        </section>
+        <section class="card">
+          <h2>⚖️ 仓位重平衡</h2>
+          <ul class="info-list">
+            <li><span>动作</span><strong id="rebalanceAction">—</strong></li>
+            <li><span>调仓份数</span><strong id="rebalanceShares">—</strong></li>
+            <li><span>调仓金额</span><strong id="rebalanceDiff">—</strong></li>
+          </ul>
+        </section>
+        <section class="card card-wide">
+          <h2>📱 东方财富条件单</h2>
+          <ul class="notes-list" id="conditionalOrders"></ul>
+        </section>
+      </div>
+
       <section class="card report-card">
         <div class="report-header">
           <h2>📋 完整报告</h2>
@@ -85,11 +105,12 @@
     </main>
 
     <footer class="footer">
-      ⚠️ 结构概率决策工具，不构成投资建议 · v7.0.0
+      ⚠️ 结构概率决策工具，不构成投资建议 · v8.0.0
     </footer>
   </div>
 
   <script src="js/v7-core.js"></script>
+  <script src="js/v8-core.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

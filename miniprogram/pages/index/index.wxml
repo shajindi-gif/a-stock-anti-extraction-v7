@@ -1,7 +1,7 @@
 <view class="container">
   <view class="header">
-    <text class="title">🧠 A股反收割系统 v7</text>
-    <text class="subtitle">AI交易决策 · Level2 + 预测版</text>
+    <text class="title">🚀 A股反收割系统 v8</text>
+    <text class="subtitle">执行闭环 + 东方财富条件单</text>
   </view>
 
   <picker mode="selector" range="{{scenarioLabels}}" value="{{scenarioIndex}}" bindchange="onScenarioChange">
@@ -63,6 +63,26 @@
     </view>
   </view>
 
+  <view class="v8-section">
+    <text class="section-title">🔄 v8 执行闭环</text>
+    <view class="card">
+      <view class="info-row"><text class="label">订单路由</text><text>{{orderRoute}}</text></view>
+      <view class="info-row"><text class="label">重平衡</text><text>{{rebalanceAction}} · {{rebalanceShares}} 份</text></view>
+    </view>
+  </view>
+
+  <view class="v8-section">
+    <text class="section-title">📱 东方财富条件单</text>
+    <view class="card">
+      <view wx:if="{{conditionalOrders.length === 0}}" class="note">当前无需设置条件单</view>
+      <view wx:for="{{conditionalOrders}}" wx:key="type" class="cond-item">
+        <text class="cond-type">{{item.type}}</text>
+        <text class="cond-detail">触发 {{item.trigger_price}} · {{item.quantity}}</text>
+        <text class="cond-path">{{item.app_path}}</text>
+      </view>
+    </view>
+  </view>
+
   <view class="card report-card">
     <view class="report-header">
       <text class="card-title">📋 完整报告</text>
@@ -71,5 +91,5 @@
     <text class="report" selectable>{{reportText}}</text>
   </view>
 
-  <view class="footer">⚠️ 结构概率决策工具，不构成投资建议 · v7.0.0</view>
+  <view class="footer">⚠️ 结构概率决策工具，不构成投资建议 · v8.0.0</view>
 </view>

@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=400" />
-  <title>A股反收割系统 v7</title>
+  <title>A股反收割系统 v8</title>
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
   <div class="popup">
     <header>
-      <span class="logo">🧠</span>
+      <span class="logo">🚀</span>
       <div>
-        <h1>反收割 v7</h1>
-        <p>AI 交易决策</p>
+        <h1>反收割 v8</h1>
+        <p>执行闭环 + 东财条件单</p>
       </div>
     </header>
 
@@ -35,21 +35,23 @@
         <span id="decision" class="badge">—</span>
       </div>
       <div class="stat">
-        <label>仓位</label>
-        <span id="position">—</span>
+        <label>路由</label>
+        <span id="orderRoute">—</span>
       </div>
       <div class="stat">
-        <label>止损</label>
-        <span id="stop">—</span>
+        <label>条件单</label>
+        <span id="condCount">—</span>
       </div>
     </div>
 
+    <div id="condList" class="cond-list"></div>
     <pre id="report" class="report"></pre>
 
-    <footer>⚠️ 不构成投资建议</footer>
+    <footer>⚠️ 不构成投资建议 · v8</footer>
   </div>
 
   <script src="js/v7-core.js"></script>
+  <script src="js/v8-core.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

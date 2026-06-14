@@ -1,7 +1,8 @@
 (function () {
   'use strict';
 
-  const { runV7Pipeline, toReport, getScenario, getScenarioOptions, decisionColor } = V7Engine;
+  const Engine = typeof V8Engine !== 'undefined' ? V8Engine : V7Engine;
+  const { runV8Pipeline, toReportV8, getScenario, getScenarioOptions, decisionColor } = Engine;
 
   const els = {
     scenario: document.getElementById('scenario'),
@@ -11,8 +12,9 @@
     segDown: document.getElementById('segDown'),
     symbol: document.getElementById('symbol'),
     decision: document.getElementById('decision'),
-    position: document.getElementById('position'),
-    stop: document.getElementById('stop'),
+    orderRoute: document.getElementById('orderRoute'),
+    condCount: document.getElementById('condCount'),
+    condList: document.getElementById('condList'),
     report: document.getElementById('report'),
   };
 
@@ -21,26 +23,31 @@
   }
 
   function render(result) {
-    const p = result.probability;
+    const v7 = result.v7;
+    const p = v7.probability;
     els.segUp.style.width = pct(p.up);
     els.segSide.style.width = pct(p.side);
     els.segDown.style.width = pct(p.down);
-    els.symbol.textContent = result.symbol + ' ' + result.price.toFixed(3);
+    els.symbol.textContent = v7.symbol + ' ' + v7.price.toFixed(3);
 
-    const color = decisionColor(result.decision);
-    els.decision.textContent = result.decision;
+    const color = decisionColor(v7.decision);
+    els.decision.textContent = v7.decision;
     els.decision.style.color = color;
     els.decision.style.background = color + '22';
 
-    els.position.textContent = pct(result.position);
-    els.stop.textContent = '-' + result.stop_pct + '%';
-    els.report.textContent = toReport(result);
+    els.orderRoute.textContent = result.order_route.action_label;
+    els.condCount.textContent = result.conditional_orders.length + ' 条';
 
+    els.condList.innerHTML = result.conditional_orders.map(function (o) {
+      return '<div class="cond-item"><b>' + o.type + '</b> @ ' + o.trigger_price + '</div>';
+    }).join('');
+
+    els.report.textContent = toReportV8(result);
     chrome.storage.local.set({ lastScenario: els.scenario.value });
   }
 
   function analyze() {
-    render(runV7Pipeline(getScenario(els.scenario.value)));
+    render(runV8Pipeline(getScenario(els.scenario.value)));
   }
 
   getScenarioOptions().forEach(function (opt) {
@@ -51,9 +58,7 @@
   });
 
   chrome.storage.local.get(['lastScenario'], function (data) {
-    if (data.lastScenario) {
-      els.scenario.value = data.lastScenario;
-    }
+    if (data.lastScenario) els.scenario.value = data.lastScenario;
     analyze();
   });
 
